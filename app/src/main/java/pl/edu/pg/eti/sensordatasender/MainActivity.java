@@ -30,10 +30,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void click(View view) {
-        Intent intent = null;
         switch (view.getId()) {
             case R.id.sendBtn:
                 sendData();
+                break;
+            case R.id.serverAddressBtn:
                 break;
         }
     }
