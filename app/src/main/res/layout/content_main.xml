@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,33 +11,41 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="141dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="36dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="35dp"
         android:text="Server address"
-        android:textSize="20dp"
+        android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="122dp" />
+        tools:layout_editor_absoluteX="16dp" />
 
     <EditText
         android:id="@+id/editText"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="86dp"
         android:ems="10"
+        android:text="example.com"
         android:inputType="textPersonName"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:layout_editor_absoluteX="84dp" />
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Button
+        android:id="@+id/serverAddressBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="150dp"
+        android:text="Confirm address" />
 
     <Button
         android:id="@+id/sendBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="220dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
         android:onClick="click"
-        android:text="Send Data"
-        app:layout_constraintTop_toBottomOf="@+id/editText"
-        tools:layout_editor_absoluteX="142dp" />
+        android:text="Send Data" />
 
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
