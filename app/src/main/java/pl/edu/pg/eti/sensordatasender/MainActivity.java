@@ -1,22 +1,16 @@
 package pl.edu.pg.eti.sensordatasender;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.EditText;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText editText;
+    SensorDataSender sensorDataSender = new SensorDataSender();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,44 +18,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        editText = (EditText) findViewById(R.id.editText);
-        Log.d("activity", editText.toString());
     }
 
     public void click(View view) {
         switch (view.getId()) {
             case R.id.sendBtn:
-                sendData();
-                break;
-            case R.id.serverAddressBtn:
+
+                editText = (EditText) findViewById(R.id.editText);
+                Log.d("activityyy", editText.getText().toString());
+
+                sensorDataSender.sendData();
+
                 break;
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void sendData() {
-
     }
 }

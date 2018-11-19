@@ -32,15 +32,6 @@
         tools:layout_editor_absoluteX="0dp" />
 
     <Button
-        android:id="@+id/serverAddressBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:onClick="click"
-        android:text="@string/action_confirm_address" />
-
-    <Button
         android:id="@+id/sendBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="220dp"
