@@ -31,18 +31,11 @@ public class MainActivity extends AppCompatActivity {
         else {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_CALL_LOG}, MEMORY_ACCESS);
         }
-
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case MEMORY_ACCESS:
-                if ((grantResults.length > 0)&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {}
-                else {
-                    Toast.makeText(getApplicationContext(), "Jeśli nie zostanie wyrażona zgoda na dostęp do pamięci, nie będzie możliwości zapisania pliku", Toast.LENGTH_LONG).show();
-                }
+        if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_SMS)) {}
+        else {
+            ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_SMS}, MEMORY_ACCESS);
         }
+
     }
 
     public void click(View view) {

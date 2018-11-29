@@ -2,6 +2,7 @@ package pl.edu.pg.eti.sensordatasender;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.CallLog;
 import android.util.Log;
 import java.text.SimpleDateFormat;
@@ -18,7 +19,7 @@ public class SensorDataSender {
         Log.d("activityyy", dateTime);
 
         getCallsData(context);
-        getSMSDate();
+        getSMSDate(context);
     }
 
     public void getCallsData(Context context) {
@@ -43,6 +44,20 @@ public class SensorDataSender {
         int missed = missedType.getCount();
     }
 
-    private void getSMSDate() {}
+    private void getSMSDate(Context context) {
+
+        Uri sms_content = Uri.parse("content://sms/inbox");
+        Cursor inboxSMS = context.getContentResolver().query(sms_content, null,null, null, null);
+
+        Uri sms_content2 = Uri.parse("content://sms/sent");
+        Cursor outboxSMS = context.getContentResolver().query(sms_content2, null,null, null, null);
+
+        Log.d("INBOX SMS", ""+inboxSMS.getCount());
+        Log.d("OUTBOX SMS", ""+outboxSMS.getCount());
+
+        int inbox = inboxSMS.getCount();
+        int outbox = outboxSMS.getCount();
+
+    }
 
 }
