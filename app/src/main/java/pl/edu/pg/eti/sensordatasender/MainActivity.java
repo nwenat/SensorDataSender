@@ -25,9 +25,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sendBtn:
 
                 editText = (EditText) findViewById(R.id.editText);
+                String serverAddress = editText.getText().toString();
                 Log.d("activityyy", editText.getText().toString());
 
-                sensorDataSender.sendData();
+                sensorDataSender.sendData(serverAddress);
 
                 break;
         }
