@@ -5,10 +5,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.util.Log;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -17,7 +15,7 @@ public class SensorDataSender {
 
 
 
-    public JSONObject sendData(Context context, String serverAddress) {
+    public JSONObject sendData(Context context) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
         String dateTime = simpleDateFormat.format(new Date());
