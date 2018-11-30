@@ -5,24 +5,39 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class SensorDataSender {
+    JSONObject json = new JSONObject();
 
 
-    public void sendData(Context context, String serverAddress) {
+
+    public JSONObject sendData(Context context, String serverAddress) {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
         String dateTime = simpleDateFormat.format(new Date());
 
+        try {
+            json.put("dateTime", dateTime);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         Log.d("activityyy", dateTime);
 
         getCallsData(context);
         getSMSDate(context);
+        Log.d("activityyy", json.toString());
+        return json;
     }
 
     public void getCallsData(Context context) {
+
+        JSONObject jsonCall = new JSONObject();
 
         String[] projection = { CallLog.Calls.CACHED_NAME, CallLog.Calls.CACHED_NUMBER_LABEL, CallLog.Calls.TYPE };
         String where;
@@ -39,12 +54,20 @@ public class SensorDataSender {
         Cursor missedType = context.getContentResolver().query(CallLog.Calls.CONTENT_URI, projection, where, null, null);
         Log.d("MISSED CALL", ""+missedType.getCount());
 
-        int incoming = incomingType.getCount();
-        int outGoing = outGoingType.getCount();
-        int missed = missedType.getCount();
+        try {
+            jsonCall.put("INCOMING", incomingType.getCount());
+            jsonCall.put("OUT", outGoingType.getCount());
+            jsonCall.put("MISSED", missedType.getCount());
+            json.put("call", jsonCall);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void getSMSDate(Context context) {
+
+        JSONObject jsonSMS = new JSONObject();
 
         Uri sms_content = Uri.parse("content://sms/inbox");
         Cursor inboxSMS = context.getContentResolver().query(sms_content, null,null, null, null);
@@ -55,9 +78,13 @@ public class SensorDataSender {
         Log.d("INBOX SMS", ""+inboxSMS.getCount());
         Log.d("OUTBOX SMS", ""+outboxSMS.getCount());
 
-        int inbox = inboxSMS.getCount();
-        int outbox = outboxSMS.getCount();
+        try {
+            jsonSMS.put("INBOX", inboxSMS.getCount());
+            jsonSMS.put("OUTBOX", outboxSMS.getCount());
+            json.put("SMS", jsonSMS);
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
-
 }

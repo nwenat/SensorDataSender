@@ -1,7 +1,11 @@
 package pl.edu.pg.eti.sensordatasender;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -11,14 +15,26 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText editText;
     SensorDataSender sensorDataSender = new SensorDataSender();
-    private String path = Environment.getExternalStorageDirectory().toString() + "/DigitalZombieLab/KenisToys";
     private final int MEMORY_ACCESS = 5;
+    private JSONObject jsonObject;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         else {
             ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_SMS}, MEMORY_ACCESS);
         }
-
     }
 
     public void click(View view) {
@@ -46,9 +61,47 @@ public class MainActivity extends AppCompatActivity {
                 String serverAddress = editText.getText().toString();
                 Log.d("activityyy", editText.getText().toString());
 
-                sensorDataSender.sendData(getApplicationContext(), serverAddress);
+                jsonObject = sensorDataSender.sendData(getApplicationContext(), serverAddress);
+
+                sendPost();
 
                 break;
         }
     }
+
+
+    public void sendPost() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String urlAdress = "https://jsonplaceholder.typicode.com/posts";
+                    URL url = new URL(urlAdress);
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                    conn.setRequestProperty("Accept","application/json");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+
+                    DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                    os.writeBytes(jsonObject.toString());
+
+                    os.flush();
+                    os.close();
+
+                    Log.d("STATUS", String.valueOf(conn.getResponseCode()));
+                    Log.d("MSG" , conn.getResponseMessage());
+
+                    conn.disconnect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        thread.start();
+    }
+
+
 }
