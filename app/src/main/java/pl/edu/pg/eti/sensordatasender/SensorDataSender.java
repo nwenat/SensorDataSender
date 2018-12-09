@@ -13,11 +13,9 @@ import java.util.Date;
 public class SensorDataSender {
     JSONObject json = new JSONObject();
 
-
-
     public JSONObject sendData(Context context) {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat();
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateTime = simpleDateFormat.format(new Date());
 
         try {
@@ -35,8 +33,6 @@ public class SensorDataSender {
 
     public void getCallsData(Context context) {
 
-        JSONObject jsonCall = new JSONObject();
-
         String[] projection = { CallLog.Calls.CACHED_NAME, CallLog.Calls.CACHED_NUMBER_LABEL, CallLog.Calls.TYPE };
         String where;
 
@@ -53,10 +49,9 @@ public class SensorDataSender {
         Log.d("MISSED CALL", ""+missedType.getCount());
 
         try {
-            jsonCall.put("INCOMING", incomingType.getCount());
-            jsonCall.put("OUT", outGoingType.getCount());
-            jsonCall.put("MISSED", missedType.getCount());
-            json.put("call", jsonCall);
+            json.put("incoming", incomingType.getCount());
+            json.put("outgoing", outGoingType.getCount());
+            json.put("missed", missedType.getCount());
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -65,21 +60,18 @@ public class SensorDataSender {
 
     private void getSMSDate(Context context) {
 
-        JSONObject jsonSMS = new JSONObject();
-
         Uri sms_content = Uri.parse("content://sms/inbox");
         Cursor inboxSMS = context.getContentResolver().query(sms_content, null,null, null, null);
 
         Uri sms_content2 = Uri.parse("content://sms/sent");
         Cursor outboxSMS = context.getContentResolver().query(sms_content2, null,null, null, null);
 
-        Log.d("INBOX SMS", ""+inboxSMS.getCount());
-        Log.d("OUTBOX SMS", ""+outboxSMS.getCount());
+        Log.d("inboxSMS", ""+inboxSMS.getCount());
+        Log.d("outboxSMS", ""+outboxSMS.getCount());
 
         try {
-            jsonSMS.put("INBOX", inboxSMS.getCount());
-            jsonSMS.put("OUTBOX", outboxSMS.getCount());
-            json.put("SMS", jsonSMS);
+            json.put("inboxSMS", inboxSMS.getCount());
+            json.put("outboxSMS", outboxSMS.getCount());
 
         } catch (JSONException e) {
             e.printStackTrace();

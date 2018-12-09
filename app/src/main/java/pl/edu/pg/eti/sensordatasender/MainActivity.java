@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 import org.json.JSONObject;
 import java.io.DataOutputStream;
 import java.net.HttpURLConnection;
@@ -16,6 +17,7 @@ import java.net.URL;
 public class MainActivity extends AppCompatActivity {
 
     EditText editText;
+    TextView messageView;
     SensorDataSender sensorDataSender = new SensorDataSender();
     private final int MEMORY_ACCESS = 5;
     private JSONObject jsonObject;
@@ -24,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         if(ActivityCompat.shouldShowRequestPermissionRationale(MainActivity.this, Manifest.permission.READ_CALL_LOG)) {}
@@ -40,15 +42,10 @@ public class MainActivity extends AppCompatActivity {
     public void click(View view) {
         switch (view.getId()) {
             case R.id.sendBtn:
-
-                editText = (EditText) findViewById(R.id.editText);
-
+                editText = findViewById(R.id.editText);
                 Log.d("activityyy", editText.getText().toString());
-
                 jsonObject = sensorDataSender.sendData(getApplicationContext());
-
                 sendPost();
-
                 break;
         }
     }
@@ -73,10 +70,17 @@ public class MainActivity extends AppCompatActivity {
 
                     os.flush();
                     os.close();
-
-                    Log.d("STATUS", String.valueOf(conn.getResponseCode()));
-                    Log.d("MSG" , conn.getResponseMessage());
-
+                    messageView = (TextView) findViewById(R.id.textView2);
+                    Log.d("respCode", String.valueOf(conn.getResponseCode()));
+                    if(conn.getResponseCode() == conn.HTTP_OK) {
+                        Log.d("MSG" , conn.getResponseMessage());
+                        Log.d("STATUS", String.valueOf(conn.getResponseCode()));
+                        messageView.setText("Your data was send ok.");
+                    } else {
+                        Log.d("MSG" , conn.getResponseMessage());
+                        Log.d("STATUS", String.valueOf(conn.getErrorStream().toString()));
+                        messageView.setText("There is a problem with send data!!!");
+                    }
                     conn.disconnect();
                 } catch (Exception e) {
                     e.printStackTrace();
